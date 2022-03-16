@@ -1,7 +1,14 @@
+//load express
 const express = require('express');
 const app = express();
 
-let myFavouriteMovies = [
+//load morgan
+const morgan = require('morgan');
+
+//log request data in terminal
+app.use(morgan('common'));
+
+let myfavoriteMovies = [
   {
     title: 'Green Mile',
     director: 'Frank Darabont',
@@ -64,21 +71,26 @@ let myFavouriteMovies = [
   }
 ];
 
-// GET requests
-app.get('/', (req, res) => {
-  res.send('The site will be about my favorite movies!');
-});
-
-app.get('/documentation', (req, res) => {                  
-  res.sendFile('public/documentation.html', { root: __dirname });
-});
-
+//GET topMovies JSON for '/movies' request URL
 app.get('/movies', (req, res) => {
-  res.json(myFavouriteMovies);
+    res.json(myfavoriteMovies);
+  });
+  
+//GET Welcome message for '/' request URL
+app.get('/', (req, res) => {
+res.send('Welcome! This site will be about awesome movies!');
+});
+  
+//serve static files from the public directory
+app.use(express.static('public'));
+
+//error handling
+app.use((err, req, res, next) => {
+console.error(err.stack)
+res.status(500).send('Oops, there was an error requesting the page');
 });
 
-
-// listen for requests
+//listen to port 8080
 app.listen(8080, () => {
-  console.log('Your app is listening on port 8080.');
+console.log('Your app is listening on port 8080.');
 });
