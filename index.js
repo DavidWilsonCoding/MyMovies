@@ -5,6 +5,9 @@ const app = express();
 //load morgan
 const morgan = require('morgan');
 
+//load uuid
+const uuid = require ('uuid');
+
 //log request data in terminal
 app.use(morgan('common'));
 
