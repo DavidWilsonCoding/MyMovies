@@ -71,14 +71,125 @@ let myfavoriteMovies = [
   }
 ];
 
-//GET topMovies JSON for '/movies' request URL
-app.get('/movies', (req, res) => {
-    res.json(myfavoriteMovies);
-  });
+/* ********************* */
+/* APP ROUTING */
+/* ********************* */
+
+//GET movies JSON data for '/movies' request URL
+app.get("/movies", (req, res) => {
+  res.status(200).json(movies);
+});
   
-//GET Welcome message for '/' request URL
-app.get('/', (req, res) => {
-res.send('Welcome! This site will be about awesome movies!');
+//GET movie data by title
+app.get("/movies/:title", (req, res) => {
+  const { title } = req.params;
+  const movie = movies.find((movie) => movie.title === title);
+
+  if (movie) {
+    res.status(200).json(movie);
+  } else {
+    res.status(400).send("Movie not found");
+  }
+});
+
+//GET movie genre data
+app.get("/movies/genres/:genre", (req, res) => {
+  const genre = movies.find(
+    (movie) => movie.genre.name === req.params.genre
+  ).genre;
+
+  if (genre) {
+    res.status(200).json(genre);
+  } else {
+    res.status(404).send("Genre does not exist");
+  }
+});
+
+//GET movie director data
+app.get("/movies/directors/:director", (req, res) => {
+  const director = movies.find(
+    (movie) => movie.director.name === req.params.director
+  ).director;
+
+  if (director) {
+    res.status(200).json(director);
+  } else {
+    res.status(404).send("Director not found.");
+  }
+});
+
+//POST new user (to register)
+app.post("/users", (req, res) => {
+  const newUser = req.body;
+  if (newUser.userName) {
+    newUser.id = uuid.v4();
+    users.push(newUser);
+    res.status(201).json(newUser);
+  } else {
+    res.status(400).send("userName not entered");
+  }
+});
+
+
+//PUT nuewUserName (to allow users to update userName)
+app.put("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const newUserName = req.body;
+  let user = users.find((user) => user.id == id);
+
+  if (user) {
+    user.name = newUserName.name;
+    res.status(200).json(user);
+  } else {
+    res.status(400).send("User does not exist");
+  }
+});
+
+//POST new movie to user's account
+app.post("/users/:id/:movie", (req, res) => {
+  const { id, movie } = req.params;
+  let user = users.find((user) => user.id == id);
+
+  if (user) {
+    user.movieFavs.push(movie);
+    res.status(200).send(`${movie} has been added to user ${id}'s array`);
+  } else {
+    res.status(400).send("User does not exist");
+  }
+});
+
+//DELETE movie from user's account
+app.delete("/users/:id/:movie", (req, res) => {
+  const { id } = req.params;
+  let user = users.find((user) => user.id == id);
+
+  if (user) {
+    user.movieFavs = user.movieFavs.filter((mov) => {
+      return mov !== req.params.movie;
+    });
+    res
+      .status(200)
+      .send(
+        req.params.movie + " was removed from " + user.id + "'s favorites list."
+      );
+  } else {
+    res.status(404).send("User does not exist");
+  }
+});
+
+//DELETE user by id
+app.delete("/users/:id", (req, res) => {
+  const { id } = req.params;
+  let user = users.find((user) => user.id == id);
+
+  if (user) {
+    users = users.filter((user) => {
+      return user.id !== req.params.id;
+    });
+    res.status(201).send("User " + req.params.id + " was deleted.");
+  } else {
+    res.status(404).send("User does not exist");
+  }
 });
   
 //serve static files from the public directory
