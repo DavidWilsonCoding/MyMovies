@@ -11,7 +11,7 @@ const uuid = require ('uuid');
 //log request data in terminal
 app.use(morgan('common'));
 
-let myfavoriteMovies = [
+let movies = [
   {
     title: 'Green Mile',
     director: 'Frank Darabont',
