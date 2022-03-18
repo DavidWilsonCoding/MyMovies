@@ -113,7 +113,7 @@
           Example:
           <pre>
             {
-              "id": '',
+              "userId": '',
               "userName": '',
               "topFilms": []
             }
@@ -123,15 +123,15 @@
 
       <tr>
         <td>Allow users to update their user info (username)</td>
-        <td>/users/:id</td>
+        <td>/users/:userId</td>
         <td>PUT</td>
-        <td>id</td>
+        <td>userId</td>
         <td>
           A JSON object holding data about user's new info. <br />
           Example:
           <pre>
             {
-              id: '',
+              userId: '',
               "userName": '',
               "topFilms": []
             }
@@ -151,9 +151,9 @@
 
       <tr>
         <td>Allow users to add a movie to their list of favorites</td>
-        <td>/users/:id/:movie</td>
+        <td>/users/:userId/:movie</td>
         <td>POST</td>
-        <td>id, movie</td>
+        <td>userId, movie</td>
         <td>
           A JSON object with movie info. <br />Example:
           <pre>
@@ -176,9 +176,9 @@
       </tr>
       <tr>
         <td>Allow users to remove a movie from their list of favorites</td>
-        <td>/users/:id/:movie</td>
+        <td>/users/:userId/:movie</td>
         <td>DELETE</td>
-        <td>id, movie</td>
+        <td>userId, movie</td>
         <td>NONE</td>
         <td>
           A message stating the user's movie has been deleted (or not, if
@@ -187,7 +187,7 @@
       </tr>
       <tr>
         <td>Allow existing users to deregister</td>
-        <td>/users/:id</td>
+        <td>/users/:userId</td>
         <td>DELETE</td>
         <td>NONE</td>
         <td>NONE</td>
