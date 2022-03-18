@@ -74,6 +74,19 @@ let movies = [
   }
 ];
 
+let users = [
+  {
+    userId: 001,
+    userName: 'filmFan',
+    topFilms: ['The Shining', 'Scent of a Woman']
+  },
+  {
+    userId: 002,
+    userName: 'movieMan',
+    topFilms: ['The Brothers Grimsby', 'Borat']
+  }
+];
+
 /* ********************* */
 /* APP ROUTING */
 /* ********************* */
@@ -125,7 +138,7 @@ app.get("/movies/directors/:director", (req, res) => {
 app.post("/users", (req, res) => {
   const newUser = req.body;
   if (newUser.userName) {
-    newUser.id = uuid.v4();
+    newUser.userId = uuid.v4();
     users.push(newUser);
     res.status(201).json(newUser);
   } else {
@@ -135,13 +148,13 @@ app.post("/users", (req, res) => {
 
 
 //PUT nuewUserName (to allow users to update userName)
-app.put("/users/:id", (req, res) => {
-  const { id } = req.params;
+app.put("/users/:userId", (req, res) => {
+  const { userId } = req.params;
   const newUserName = req.body;
-  let user = users.find((user) => user.id == id);
+  let user = users.find((user) => user.userId == userId);
 
   if (user) {
-    user.name = newUserName.name;
+    user.userName = newUserName.userName;
     res.status(200).json(user);
   } else {
     res.status(400).send("User does not exist");
@@ -149,31 +162,31 @@ app.put("/users/:id", (req, res) => {
 });
 
 //POST new movie to user's account
-app.post("/users/:id/:movie", (req, res) => {
-  const { id, movie } = req.params;
-  let user = users.find((user) => user.id == id);
+app.post("/users/:userId/:movie", (req, res) => {
+  const { userId, movie } = req.params;
+  let user = users.find((user) => user.userId == userId);
 
   if (user) {
     user.movieFavs.push(movie);
-    res.status(200).send(`${movie} has been added to user ${id}'s array`);
+    res.status(200).send(`${movie} has been added to user ${userId}'s array`);
   } else {
     res.status(400).send("User does not exist");
   }
 });
 
 //DELETE movie from user's account
-app.delete("/users/:id/:movie", (req, res) => {
-  const { id } = req.params;
-  let user = users.find((user) => user.id == id);
+app.delete("/users/:userId/:movie", (req, res) => {
+  const { userId } = req.params;
+  let user = users.find((user) => user.userId == userId);
 
   if (user) {
-    user.movieFavs = user.movieFavs.filter((mov) => {
+    user.topFIms = user.topFIms.filter((mov) => {
       return mov !== req.params.movie;
     });
     res
       .status(200)
       .send(
-        req.params.movie + " was removed from " + user.id + "'s favorites list."
+        req.params.movie + " was removed from " + user.userId + "'s favorites list."
       );
   } else {
     res.status(404).send("User does not exist");
@@ -181,15 +194,15 @@ app.delete("/users/:id/:movie", (req, res) => {
 });
 
 //DELETE user by id
-app.delete("/users/:id", (req, res) => {
-  const { id } = req.params;
-  let user = users.find((user) => user.id == id);
+app.delete("/users/:userId", (req, res) => {
+  const { userId } = req.params;
+  let user = users.find((user) => user.userId == userId);
 
   if (user) {
     users = users.filter((user) => {
-      return user.id !== req.params.id;
+      return user.userId !== req.params.userId;
     });
-    res.status(201).send("User " + req.params.id + " was deleted.");
+    res.status(201).send("User " + req.params.userId + " was deleted.");
   } else {
     res.status(404).send("User does not exist");
   }
