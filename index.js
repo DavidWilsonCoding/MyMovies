@@ -209,7 +209,6 @@ app.post('/users', (req, res) => {
 
 //PUT nuewUserName (to allow users to update userName)
 app.put('/users/:userId', (req, res) => {
-  const pUserId  = req.params.userId;
   const reqBody = req.body;
   const user = users.find((user) => user.userId == pUserId);
   if (user) {
@@ -254,6 +253,7 @@ app.delete("/users/:userId", (req, res) => {
     users = users.filter((user) => {
       return user.userId !== pUserId;
     });
+    console.log("here");
     res.status(201).send("User " + pUserId + " was deleted.");
   } else {
     res.status(404).send("User does not exist");
