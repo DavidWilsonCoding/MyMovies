@@ -6,92 +6,156 @@ const app = express();
 const morgan = require('morgan');
 
 //load uuid
-const uuid = require ('uuid');
+const uuid = require('uuid');
+
+//load bodyParser
+const bodyParser = require('body-parser');
 
 //log request data in terminal
 app.use(morgan('common'));
 
+//allow request body to be parsed
+app.use(bodyParser.json());
+
 let movies = [
   {
     title: 'Green Mile',
-    director: 'Frank Darabont',
+    genre: {
+      genreName: "drama",
+      genreDesc: "a written work that tells a story through action and speech and is acted out.",
+    },
+    director: {
+      dirName: 'Frank Darabont'
+    },    
     star: 'Tom Hanks',
     year: 2000
   },
   {
     title: 'The Brothers Grimsby',
-    director: 'Louis Leterrier',
+    genre: {
+      genreName: "comedy",
+      genreDesc: "a genre designed to cause amusement."
+    },
+    director: {
+      dirName: 'Louis Leterrier'
+    },
     star: 'Sascha Baron Cohen',
     year: 2016
   },
   {
     title: 'In the Name of the Father',
-    director: 'Jim Sheridan',
-    star: 'Daniel day-Lewis',
+    genre: {
+      genreName: "drama",
+      genreDesc: "a written work that tells a story through action and speech and is acted out.",
+    },
+    director: {
+      dirName: 'Jim Sheridan'
+    },
+    star: 'Daniel Day-Lewis',
     year: 1993
   },
   {
     title: 'Ferris Bueller\'s Day Off',
-    director: 'John Hughes',
+    genre: {
+      genreName: "comedy",
+      genreDesc: "a genre designed to cause amusement."
+    },
+    director: {
+      dirName: 'John Hughes'
+    },
     star: 'Matthew BRoderick',
     year: 1986
   },
   {
     title: 'Drive',
-    director: 'Louis Leterrier',
+    genre: {
+      genreName: "drama",
+      genreDesc: "a written work that tells a story through action and speech and is acted out.",
+    },
+    director: {
+      dirName: 'Louis Leterrier'
+    },
     star: 'Ryan Gosling',
     year: 2011
   },
   {
     title: 'Borat',
-    director: 'Larry Charles',
+    genre: {
+      genreName: "comedy",
+      genreDesc: "a genre designed to cause amusement."
+    },
+    director: {
+      dirName: 'Larry Charles'
+    },
     star: 'Sascha Baron Cohen',
     year: 2006
   },
   {
     title: 'In the Light of the Moon',
-    director: 'Leah Welch',
+    genre: {
+      genreName: "horror",
+      genreDesc: "a story in which the focus is on creating a feeling of fear."
+    },
+    director: {
+      dirName: 'Leah Welch'
+    },
     star: 'Hailee Lipscomb',
     year: 2021
   },
   {
     title: 'The Shining',
-    director: 'Stanley Kubrick',
+    genre: {
+      genreName: "horror",
+      genreDesc: "a story in which the focus is on creating a feeling of fear."
+    },
+    director: {
+      dirName: 'Stanley Kubrick'
+    },
     star: 'Jack Nicholson',
     year: 1980
   },
   {
     title: 'The Godfather',
-    director: 'Francis Ford Coppola',
+    genre: {
+      genreName: "drama",
+      genreDesc: "a written work that tells a story through action and speech and is acted out.",
+    },
+    director: {
+      dirName: 'Franics Ford Coppola'
+    },
     star: 'Al Pacino',
     year: 1972
   },
   {
     title: 'Scent of a Woman',
-    director: 'Martin Brest',
+    genre: {
+      genreName: "drama",
+      genreDesc: "a written work that tells a story through action and speech and is acted out.",
+    },
+    director: {
+      dirName: 'Martin Brest'
+    },
     star: 'Al Pacino',
     year: 1992
   }
 ];
 
-let users = [
+let users =  [
   {
-    userId: 001,
-    userName: 'filmFan',
-    topFilms: ['The Shining', 'Scent of a Woman']
-  },
-  {
-    userId: 002,
-    userName: 'movieMan',
-    topFilms: ['The Brothers Grimsby', 'Borat']
+    userId: 1,
+    userName: 'David',
+    email: 'david.wilson.coding@gmail.com',
+    password: 'secretPassword',
+    birthday: '30/12/1974',
+    topFilms: ['Borat', 'Drive']
   }
-];
+]
 
 /* ********************* */
 /* APP ROUTING */
 /* ********************* */
 
-//GET movies JSON data for '/movies' request URL
+//GET all movies
 app.get("/movies", (req, res) => {
   res.status(200).json(movies);
 });
@@ -100,7 +164,6 @@ app.get("/movies", (req, res) => {
 app.get("/movies/:title", (req, res) => {
   const { title } = req.params;
   const movie = movies.find((movie) => movie.title === title);
-
   if (movie) {
     res.status(200).json(movie);
   } else {
@@ -109,24 +172,22 @@ app.get("/movies/:title", (req, res) => {
 });
 
 //GET movie genre data
-app.get("/movies/genres/:genre", (req, res) => {
+app.get("/movies/genres/:genreName", (req, res) => {
   const genre = movies.find(
-    (movie) => movie.genre.name === req.params.genre
+    (movie) => movie.genre.genreName === req.params.genreName
   ).genre;
-
   if (genre) {
     res.status(200).json(genre);
   } else {
-    res.status(404).send("Genre does not exist");
+    res.status(400).send("Genre does not exist");
   }
 });
 
 //GET movie director data
-app.get("/movies/directors/:director", (req, res) => {
+app.get("/movies/directors/:dirName", (req, res) => {
   const director = movies.find(
-    (movie) => movie.director.name === req.params.director
+    (movie) => movie.director.dirName === req.params.dirName
   ).director;
-
   if (director) {
     res.status(200).json(director);
   } else {
@@ -134,8 +195,8 @@ app.get("/movies/directors/:director", (req, res) => {
   }
 });
 
-//POST new user (to register)
-app.post("/users", (req, res) => {
+//POST new user (to POST new user to users)
+app.post('/users', (req, res) => {
   const newUser = req.body;
   if (newUser.userName) {
     newUser.userId = uuid.v4();
@@ -146,67 +207,60 @@ app.post("/users", (req, res) => {
   }
 });
 
-
 //PUT nuewUserName (to allow users to update userName)
-app.put("/users/:userId", (req, res) => {
-  const { userId } = req.params;
-  const newUserName = req.body;
-  let user = users.find((user) => user.userId == userId);
-
+app.put('/users/:userId', (req, res) => {
+  const pUserId  = req.params.userId;
+  const reqBody = req.body;
+  const user = users.find((user) => user.userId == pUserId);
   if (user) {
-    user.userName = newUserName.userName;
-    res.status(200).json(user);
-  } else {
-    res.status(400).send("User does not exist");
+    user.userName = reqBody.userName;
+    res.send(user);
   }
+
 });
 
-//POST new movie to user's account
+//POST new movie to user's topFIlms array
 app.post("/users/:userId/:movie", (req, res) => {
-  const { userId, movie } = req.params;
-  let user = users.find((user) => user.userId == userId);
+  const pUserId = req.params.userId;
+  const pMovie = req.params.movie;
+  let user = users.find((user) => user.userId == pUserId);
 
   if (user) {
-    user.movieFavs.push(movie);
-    res.status(200).send(`${movie} has been added to user ${userId}'s array`);
+    console.log('user found');
+    user.topFilms.push(pMovie);
+    res.status(200).send(`${pMovie} has been added to user ${pUserId}'s array`);
   } else {
     res.status(400).send("User does not exist");
   }
 });
 
-//DELETE movie from user's account
+//DELETE movie from user's topFilms array
 app.delete("/users/:userId/:movie", (req, res) => {
-  const { userId } = req.params;
-  let user = users.find((user) => user.userId == userId);
-
+  const pUserId = req.params.userId;
+  const pMovie = req.params.movie;
+  let user = users.find((user) => user.userId == pUserId);
   if (user) {
-    user.topFIms = user.topFIms.filter((mov) => {
-      return mov !== req.params.movie;
-    });
-    res
-      .status(200)
-      .send(
-        req.params.movie + " was removed from " + user.userId + "'s favorites list."
-      );
+      res.status(200).send(`${pMovie} has been deleted from user ${pUserId}'s array`);
   } else {
     res.status(404).send("User does not exist");
   }
 });
 
-//DELETE user by id
+//DELETE user from users
 app.delete("/users/:userId", (req, res) => {
-  const { userId } = req.params;
-  let user = users.find((user) => user.userId == userId);
-
+  const pUserId = req.params.userId;
+  let user = users.find((user) => user.userId == pUserId);
   if (user) {
     users = users.filter((user) => {
-      return user.userId !== req.params.userId;
+      return user.userId !== pUserId;
     });
-    res.status(201).send("User " + req.params.userId + " was deleted.");
+    res.status(201).send("User " + pUserId + " was deleted.");
   } else {
     res.status(404).send("User does not exist");
   }
 });
+
+
   
 //serve static files from the public directory
 app.use(express.static('public'));
