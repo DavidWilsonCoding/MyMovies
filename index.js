@@ -255,14 +255,14 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
     });
   });
 
-  //display Welcome message
-  app.get('/', (req, res) => {
-    res.send("Welcome to David's Movie App!");
-  });
+//display Welcome message
+app.get('/', (req, res) => {
+  res.send("Welcome to David's Movie App!");
+});
   
 //error handling
 app.use((err, req, res, next) => {
-console.error(err.stack)
+console.error(err.stack);
 res.status(500).send('Oops, there was an error requesting the page');
 });
 
