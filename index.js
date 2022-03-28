@@ -254,6 +254,11 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
       res.status(500).send('Error: ' + err);
     });
   });
+
+  //display Welcome message
+  app.get('/', (req, res) => {
+    res.send("Welcome to David's Movie App!");
+  });
   
 //error handling
 app.use((err, req, res, next) => {
