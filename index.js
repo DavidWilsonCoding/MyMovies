@@ -22,11 +22,13 @@ const Users = Models.User;
 //import express-validator
 const { check, validationResult } = require('express-validator');
 
+console.log("in index.js");
+
 //connect to locacl MongoDB
 // mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Comnnect to hosted AtlasDB
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( 'mongodb+srv://DavidWilsonCoding:R9f9sr9f9s*@davidwilsoncoding.0jeon.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
 //log request data in terminal
 app.use(morgan('common'));
