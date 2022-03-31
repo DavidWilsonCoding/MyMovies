@@ -28,7 +28,7 @@ console.log("in index.js");
 // mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Comnnect to hosted AtlasDB
-mongoose.connect( 'mongodb+srv://DavidWilsonCoding:R9f9sr9f9s*@davidwilsoncoding.0jeon.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( 'mongodb+srv://DavidWilsonCoding:R9f9sr9f9s*@davidwilsoncoding.0jeon.mongodb.net/myMovies?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
 //log request data in terminal
 app.use(morgan('common'));
