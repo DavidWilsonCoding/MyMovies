@@ -56,6 +56,7 @@ app.use(express.static('public'));
 
 //passport.authenticate('jwt', { session: false }), 
 //GET all movies
+console.log('test');
 app.get ('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
   .then((movies) => {
